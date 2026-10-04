@@ -1,6 +1,7 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
+import json
 
 # Page Configuration
 st.set_page_config(
@@ -9,9 +10,48 @@ st.set_page_config(
     layout="centered"
 )
 
+# --- PWA CONFIGURATION (RENDER REAL APP SETUP) ---
+manifest_data = {
+    "name": "Amit Thori Enterprises",
+    "short_name": "Amit Thori",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#FDFBF7",
+    "theme_color": "#D4AF37",
+    "icons": [
+        {
+            "src": "https://img.icons8.com/color/192/briefcase.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://img.icons8.com/color/512/briefcase.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
+
+manifest_json_str = json.dumps(manifest_data)
+
+st.markdown(f"""
+    <link rel="manifest" href='data:application/manifest+json,{manifest_json_str}'>
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/briefcase.png">
+    <meta name="theme-color" content="#D4AF37">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+""", unsafe_allow_html=True)
+
 # --- LUXURY CSS WITH CLEAR BUTTON TEXT ---
 st.markdown("""
 <style>
+    /* STREAMLIT DEFAULT INTERFACE HIDE */
+    #MainMenu {visibility: hidden; display: none !important;}
+    footer {visibility: hidden; display: none !important;}
+    header {visibility: hidden; display: none !important;}
+    [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
+
     .stApp {
         background-color: #FDFBF7;
         color: #1F1B18;
