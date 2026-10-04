@@ -1,7 +1,7 @@
 import streamlit as st
 import sqlite3
 from datetime import datetime
-import json
+import streamlit.components.v1 as components
 
 # Page Configuration
 st.set_page_config(
@@ -10,38 +10,24 @@ st.set_page_config(
     layout="centered"
 )
 
-# --- PWA CONFIGURATION (RENDER REAL APP SETUP) ---
-manifest_data = {
-    "name": "Amit Thori Enterprises",
-    "short_name": "Amit Thori",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#FDFBF7",
-    "theme_color": "#D4AF37",
-    "icons": [
-        {
-            "src": "https://img.icons8.com/color/192/briefcase.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "https://img.icons8.com/color/512/briefcase.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ]
-}
-
-manifest_json_str = json.dumps(manifest_data)
-
-st.markdown(f"""
-    <link rel="manifest" href='data:application/manifest+json,{manifest_json_str}'>
-    <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/briefcase.png">
-    <meta name="theme-color" content="#D4AF37">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+# --- REAL PWA REGISTRATION (STATIC SERVING) ---
+st.markdown("""
+<link rel="manifest" href="/app/static/manifest.json">
+<link rel="apple-touch-icon" href="https://img.icons8.com/color/192/briefcase.png">
+<meta name="theme-color" content="#D4AF37">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 """, unsafe_allow_html=True)
+
+components.html("""
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/app/static/sw.js').then(function() {
+            console.log('PWA Service Worker Registered');
+        });
+    }
+</script>
+""", height=0, width=0)
 
 # --- LUXURY CSS WITH CLEAR BUTTON TEXT ---
 st.markdown("""
